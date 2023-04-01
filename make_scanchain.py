@@ -64,7 +64,11 @@ for i in range(len(projects)):
         );
     """)
 
-f.write("""
+f.write(f"""
+    // End of chain
+    assign scan_clk_out = scan_clk_in;
+    assign scan_data_out = sw_{len(projects)-1:03d}_data_out;
+
 endmodule
 """)
 

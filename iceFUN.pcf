@@ -24,4 +24,6 @@ set_io --warn-no-port scan_select   M1
 set_io --warn-no-port scan_clk_out  N1
 set_io --warn-no-port scan_data_out P1
 
+set_io --warn-no-port seg_latch P2
+
 set_io --warn-no-port clk12MHz	P7
