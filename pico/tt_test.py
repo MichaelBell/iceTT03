@@ -1,6 +1,8 @@
 import time
 import random
+
 from machine import Pin
+import hova_asm
 
 from tt_pio import TT_PIO
 from tt_hova_fifo import TT_Hova
@@ -161,6 +163,34 @@ print(in1)
 correct = [x for x in in1]
 start = time.ticks_ms()
 result = hova.run_program(in2_test, in1, NUM_VALUES)
+runtime = time.ticks_diff(time.ticks_ms(), start)
+for i in range(NUM_VALUES):
+    if result[i] != correct[i]:
+        print("Got {}, expected {}".format(result[i], correct[i]))
+print(result)
+print("Took {}ms".format(runtime))
+print()
+
+test_prog = """
+; compute B earlier to get a 4-cycle loop
+
+   A=IN1
+   B=A
+loop5:
+   A=B=A+B
+   A=B=A+B
+   W=A+B,A=IN1
+   OUT1=W,B=A,JMP loop5
+"""
+tprog = hova_asm.assemble(test_prog)
+
+print("Running example loop 5")
+NUM_VALUES = 14
+in1 = [random.randint(-2048 // 8,2047 // 8) for x in range(NUM_VALUES)]
+print(in1)
+correct = [8*x for x in in1]
+start = time.ticks_ms()
+result = hova.run_program(tprog, in1, NUM_VALUES)
 runtime = time.ticks_diff(time.ticks_ms(), start)
 for i in range(NUM_VALUES):
     if result[i] != correct[i]:
