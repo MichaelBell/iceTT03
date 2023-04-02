@@ -15,6 +15,18 @@ projects = [
     "test_invert",    # 013
     "test_straight",  # 014
     "test_invert",    # 015
+    "test_straight",  # 016
+    "test_invert",    # 017
+    "test_straight",  # 018
+    "test_invert",    # 019
+    "test_straight",  # 020
+    "test_invert",    # 021
+    "test_straight",  # 022
+    "test_invert",    # 023
+    "test_straight",  # 024
+    "test_invert",    # 025
+    "test_straight",  # 026
+    "test_invert",    # 027
 ]
 
 f = open("tt_scan_wrapper.v", "w")
