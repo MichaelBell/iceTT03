@@ -27,6 +27,12 @@ projects = [
     "test_invert",    # 025
     "test_straight",  # 026
     "test_invert",    # 027
+    "MichaelBell_6bit_fifo", # 028
+    "test_invert",    # 029
+    "test_straight",  # 030
+    "test_invert",    # 031
+    "test_straight",  # 032
+    "test_invert",    # 033
 ]
 
 f = open("tt_scan_wrapper.v", "w")

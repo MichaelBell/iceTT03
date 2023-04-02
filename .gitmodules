@@ -1,3 +1,6 @@
 [submodule "tt03-hovalaag"]
 	path = tt03-hovalaag
 	url = git@github.com:MichaelBell/tt03-hovalaag.git
+[submodule "tt03-fifo"]
+	path = tt03-fifo
+	url = git@github.com:MichaelBell/tt03-fifo.git

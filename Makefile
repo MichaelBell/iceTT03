@@ -2,13 +2,15 @@
 PROJ      = iceTT03
 
 # Files
-FILES = ledscan.v big_7seg.v scanchain.v tt_scan_wrapper.v test_modules.v tt03-hovalaag/src/hovalaag_tiny_tapeout.v tt03-hovalaag/src/hovalaag_wrapper.v ring_oscillator.v tt03-hovalaag/src/decoder.v tt_top.v tt03-hovalaag/src/HovalaagCPU/Hovalaag.v
+FILES = ledscan.v big_7seg.v scanchain.v tt_scan_wrapper.v test_modules.v tt_top.v 
+FILES += tt03-hovalaag/src/hovalaag_tiny_tapeout.v tt03-hovalaag/src/hovalaag_wrapper.v ring_oscillator.v tt03-hovalaag/src/decoder.v tt03-hovalaag/src/HovalaagCPU/Hovalaag.v
+FILES += tt03-fifo/src/fifo_top.v tt03-fifo/src/ff_fifo.v tt03-fifo/src/delay_cells.v
 
 .PHONY: iceFUN clean burn
 
 iceFUN: $(FILES)
 	# Synthesize using Yosys
-	yosys -p "synth_ice40 -top tt_top -json $(PROJ).json" -DSIM $(FILES) > yosys.log
+	yosys -p "synth_ice40 -top tt_top -json $(PROJ).json" -DSIM -DICE40 $(FILES) > yosys.log
 	@grep Warn yosys.log || true
 	@grep Error yosys.log || true
 	@echo

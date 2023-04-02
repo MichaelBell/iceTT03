@@ -22,7 +22,7 @@ latch_en.off()
 scan_select.off()
 seg_latch.off()
 
-chain_len = 28
+chain_len = 34
 
 # Test pattern
 if False:

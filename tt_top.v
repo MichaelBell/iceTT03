@@ -69,9 +69,9 @@ module tt_top (
         last_scan_data[7:1] <= last_scan_data[6:0];
         last_scan_data[0] <= scan_data_out;
 
-        if (scan_select) begin
-            tapped_data_out_reg <= tapped_data_out;
-        end
+        //if (scan_select) begin
+        //    tapped_data_out_reg <= tapped_data_out;
+        //end
     end
 
     always @(posedge clk12MHz)

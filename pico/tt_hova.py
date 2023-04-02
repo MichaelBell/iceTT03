@@ -1,7 +1,7 @@
 import time
 
 design_num = 9
-chain_len = 28
+chain_len = 34
 
 class TT_Hova:
     def __init__(self, tt_pio, pin_seg_latch):
