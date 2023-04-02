@@ -3,7 +3,7 @@ import random
 from machine import Pin
 
 from tt_pio import TT_PIO
-from tt_hova import TT_Hova
+from tt_hova_fifo import TT_Hova
 
 # Pin mapping - names from FPGA's point of view
 clk = Pin(12, Pin.OUT)
@@ -82,6 +82,10 @@ def old_send_byte(d, read=False, latch=False, scan=False):
 
     return d_out
 
+@micropython.native
+def clock_byte(d):
+    tt.send_bytes_blocking(((d & 0xFE), (d | 1)))
+
 # Test invert
 if True:
     for i in range(chain_len):
@@ -122,15 +126,45 @@ example_loop1 = [
     0b0000_00_00_00_0_00_00_01_0_0_0_000000_000000,  # JMP 0
 ]
 
+if True:
+    print("Running example loop 1")
+    NUM_VALUES = 14
+    in1 = [random.randint(-2048 // 8,2047 // 8) for x in range(NUM_VALUES)]
+    print(in1)
+    correct = [8*x for x in in1]
+    start = time.ticks_ms()
+    result = hova.run_program(example_loop1, in1, NUM_VALUES)
+    runtime = time.ticks_diff(time.ticks_ms(), start)
+    for i in range(NUM_VALUES):
+        if result[i] != correct[i]:
+            print("Got {}, expected {}".format(result[i], correct[i]))
+    print(result)
+    print("Took {}ms".format(runtime))
+    print()
+
+# Loop via IN2
+in2_test = [
+#     ALU- A- B- C- D W- F- PC O I X K----- L-----
+    0b0000_11_00_00_0_00_00_00_0_0_0_000000_000000,  # A=IN1
+    0b0000_00_00_00_0_10_00_00_0_0_0_000000_000000,  # W=A
+    0b0000_00_00_00_0_00_00_00_1_1_0_000000_000000,  # OUT2=W
+    0b0000_00_00_00_0_00_00_00_0_0_0_000000_000000,  # NOP
+    0b0000_11_00_00_0_00_00_00_0_1_0_000000_000000,  # A=IN2
+    0b0000_00_00_00_0_10_00_00_0_0_0_000000_000000,  # W=A
+    0b0000_00_00_00_0_00_00_01_1_0_0_000000_000000,  # OUT1=W, JMP 0
+]
+
+print("Running test of IN2")
 NUM_VALUES = 14
-in1 = [random.randint(-2048 // 8,2047 // 8) for x in range(NUM_VALUES)]
+in1 = [random.randint(0,2047) for x in range(NUM_VALUES)]
 print(in1)
-correct = [8*x for x in in1]
+correct = [x for x in in1]
 start = time.ticks_ms()
-result = hova.run_program(example_loop1, in1, NUM_VALUES)
+result = hova.run_program(in2_test, in1, NUM_VALUES)
 runtime = time.ticks_diff(time.ticks_ms(), start)
 for i in range(NUM_VALUES):
     if result[i] != correct[i]:
         print("Got {}, expected {}".format(result[i], correct[i]))
 print(result)
 print("Took {}ms".format(runtime))
+print()

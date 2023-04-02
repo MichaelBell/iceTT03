@@ -50,7 +50,7 @@ class TT_PIO:
         self.sm.active(1)
 
     @micropython.native
-    def send_byte_blocking(self, d, latch, scan):
+    def send_byte_blocking(self, d, latch=False, scan=False):
         val = (0x200 if scan else 0) | (0x100 if latch else 0) | (d & 0xFF)
         self.sm.put(val, 22)
         return self.sm.get() & 0xFF
