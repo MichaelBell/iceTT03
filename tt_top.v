@@ -46,9 +46,9 @@ module tt_top (
         output lcol4
         );
 
-    //wire [7:0] tapped_data_in;
-    //wire [7:0] tapped_data_out;
-    //reg [7:0] tapped_data_out_reg;
+    wire [7:0] tapped_data_in;
+    wire [7:0] tapped_data_out;
+    reg [7:0] tapped_data_out_reg;
 
     tt_scan_wrapper wrapper(
         .scan_clk_in(scan_clk_in),
@@ -58,8 +58,8 @@ module tt_top (
         .scan_clk_out(scan_clk_out),
         .scan_data_out(scan_data_out),
 
-        //.module_data_in_tap(tapped_data_in),
-        //.module_data_out_tap(tapped_data_out),
+        .module_data_in_tap(tapped_data_in),
+        .module_data_out_tap(tapped_data_out),
     );
 
     reg [7:0] last_scan_data;
@@ -69,9 +69,9 @@ module tt_top (
         last_scan_data[7:1] <= last_scan_data[6:0];
         last_scan_data[0] <= scan_data_out;
 
-        //if (scan_select) begin
-        //    tapped_data_out_reg <= tapped_data_out;
-        //end
+        if (scan_select) begin
+            tapped_data_out_reg <= tapped_data_out;
+        end
     end
 
     always @(posedge clk12MHz)
@@ -94,8 +94,8 @@ module tt_top (
     LedScan scan (
                 .clk12MHz(clk12MHz),
                 .leds1(button1 ? last_scan_data : leds1_7seg),
-                .leds2(button1 ? /*tapped_data_in*/ 8'h00 : leds2_7seg),
-                .leds3(button1 ? /*tapped_data_out_reg*/ 8'h00 : leds3_7seg),
+                .leds2(button1 ? tapped_data_in : leds2_7seg),
+                .leds3(button1 ? tapped_data_out_reg : leds3_7seg),
                 .leds4(button1 ? 8'h00          : leds4_7seg),
                 .leds(leds_out),
                 .lcol(lcol)

@@ -35,6 +35,9 @@ projects = [
     "test_invert",    # 033
 ]
 
+# Design to tap the inputs and outputs of, for display on LEDs for debugging
+tap_design = 28
+
 f = open("tt_scan_wrapper.v", "w")
 
 f.write("""
@@ -46,6 +49,9 @@ module tt_scan_wrapper (
 
         output scan_clk_out,
         output scan_data_out,
+
+        output [7:0] module_data_in_tap,
+        output [7:0] module_data_out_tap,
 );
 
     // Setup for first scanchain block
@@ -83,6 +89,10 @@ for i in range(len(projects)):
     """)
 
 f.write(f"""
+    // Tap
+    assign module_data_in_tap = sw_{tap_design:03d}_module_data_in;
+    assign module_data_out_tap = sw_{tap_design:03d}_module_data_out;
+
     // End of chain
     assign scan_clk_out = scan_clk_in;
     assign scan_data_out = sw_{len(projects)-1:03d}_data_out;
